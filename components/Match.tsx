@@ -97,7 +97,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
       <CardHeader>
         <p>{country.toUpperCase()}</p>
         <LeagueTitle>{leagueTitle}</LeagueTitle>
-        <StatusText statusColor={statusColor}>
+        <StatusText $statusColor={statusColor}>
           {statusEnum === "UPCOMING" ? `${formattedDate} ${time}` : statusEnum}
         </StatusText>
       </CardHeader>
