@@ -1,8 +1,32 @@
-import React from "react";
+import styled from "styled-components";
 
 interface CircleProps {
   minute: number;
 }
+
+const CircleContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+`;
+
+const CircleSvg = styled.svg`
+  transform: rotate(-90deg);
+`;
+
+const CircleText = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.125rem;
+  font-weight: bold;
+`;
 
 const Circle: React.FC<CircleProps> = ({ minute }) => {
   const radius = 36;
@@ -23,8 +47,8 @@ const Circle: React.FC<CircleProps> = ({ minute }) => {
   }
 
   return (
-    <div className="relative flex items-center justify-center w-20 h-20">
-      <svg width="80" height="80" className="transform -rotate-90">
+    <CircleContainer>
+      <CircleSvg width="80" height="80">
         <circle
           stroke="gray"
           fill="transparent"
@@ -43,11 +67,9 @@ const Circle: React.FC<CircleProps> = ({ minute }) => {
           cx="40"
           cy="40"
         />
-      </svg>
-      <div className="absolute flex items-center justify-center w-full h-full text-lg font-bold">
-        {text}
-      </div>
-    </div>
+      </CircleSvg>
+      <CircleText>{text}</CircleText>
+    </CircleContainer>
   );
 };
 

@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import "./globals.css";
 import localFont from "@next/font/local";
+import StyledComponentsRegistry from "@/lib/registry";
 
 const barlow = localFont({
   src: [
@@ -9,11 +10,11 @@ const barlow = localFont({
       weight: "400",
     },
     {
-      path: '../public/fonts/Barlow-Bold.ttf',
-      weight: "700"
-    }
+      path: "../public/fonts/Barlow-Bold.ttf",
+      weight: "700",
+    },
   ],
-  variable: '--font-barlow'
+  variable: "--font-barlow",
 });
 
 export const metadata = {
@@ -29,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${barlow.variable} font-sans`}>
-        <Header />
-        {children}
+        <StyledComponentsRegistry>
+          <Header />
+          {children}
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

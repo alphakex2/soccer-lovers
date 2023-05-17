@@ -43,3 +43,16 @@ export interface Match {
 }
 
 export type Filter = "all" | "finished" | "inprogress" | "notstarted";
+
+export enum STATUS {
+  ENDED = "ENDED",
+  LIVE = "LIVE",
+  CANCELLED = "CANCELLED",
+  UPCOMING = "UPCOMING",
+}
+export const STATUS_MAPPING = {
+  finished: STATUS.ENDED,
+  canceled: STATUS.CANCELLED,
+  inprogress: STATUS.LIVE,
+  notstarted: STATUS.UPCOMING,
+};

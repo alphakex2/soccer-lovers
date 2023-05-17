@@ -1,10 +1,55 @@
 "use client";
 
+import styled from "styled-components";
 import { Match } from "@/types";
 import { FunctionComponent, useEffect, useState } from "react";
 import Filter from "./Filter";
 import MatchCard from "./Match";
 
+const HomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 1rem;
+  overflow: auto;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+`;
+
+const FilterContainer = styled.div`
+  height: 100%;
+  overflow: auto;
+  background-color: #3d3d3d;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 20rem;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+`;
+
+const MatchesContainer = styled.div`
+  height: 100%;
+  overflow: auto;
+  padding: 1rem;
+  background-color: #3d3d3d;
+  border-radius: 0.5rem;
+  flex-grow: 1;
+`;
+
+const MatchesGrid = styled.div`
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
 interface HomeProps {}
 
 const HomePage: FunctionComponent<HomeProps> = () => {
@@ -33,30 +78,30 @@ const HomePage: FunctionComponent<HomeProps> = () => {
   });
 
   return (
-    <div className="flex flex-col h-screen m-4 overflow-auto lg:flex-row">
-    <div className="h-full overflow-auto lg:w-80 lg:h-auto bg-[#3D3D3D] rounded lg:mr-4 mb-4 lg:mb-0">
-      <Filter matches={matches} setFilter={setFilter} />
-    </div>
-    <div className="h-full overflow-auto p-4 bg-[#3D3D3D] rounded lg:flex-grow">
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-1 lg:grid-cols-3">
-        {filteredMatches.map((item) => (
-          <MatchCard
-            key={item.id}
-            country={item.country}
-            leagueTitle={item.competition}
-            status={item.status.type}
-            homeScore={item.homeScore.current}
-            awayScore={item.awayScore.current}
-            minute={Number(item.liveStatus)}
-            homeTeam={item.homeTeam.name}
-            awayTeam={item.awayTeam.name}
-            date={item.date}
-            time={item.time}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
+    <HomeContainer>
+      <FilterContainer>
+        <Filter matches={matches} setFilter={setFilter} />
+      </FilterContainer>
+      <MatchesContainer>
+        <MatchesGrid>
+          {filteredMatches.map((item) => (
+            <MatchCard
+              key={item.id}
+              country={item.country}
+              leagueTitle={item.competition}
+              status={item.status.type}
+              homeScore={item.homeScore.current}
+              awayScore={item.awayScore.current}
+              minute={Number(item.liveStatus)}
+              homeTeam={item.homeTeam.name}
+              awayTeam={item.awayTeam.name}
+              date={item.date}
+              time={item.time}
+            />
+          ))}
+        </MatchesGrid>
+      </MatchesContainer>
+    </HomeContainer>
   );
 };
 

@@ -1,18 +1,63 @@
-import React from "react";
+import styled from "styled-components";
 import Circle from "./Circle";
+import { STATUS, STATUS_MAPPING } from "@/types";
+import { getFormattedDateAndStatusColor } from "./utils";
 
-export enum STATUS {
-  ENDED = "ENDED",
-  LIVE = "LIVE",
-  CANCELLED = "CANCELLED",
-  UPCOMING = "UPCOMING",
-}
-const STATUS_MAPPING = {
-  finished: STATUS.ENDED,
-  canceled: STATUS.CANCELLED,
-  inprogress: STATUS.LIVE,
-  notstarted: "UPCOMING",
-};
+const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  border: 1px solid #2d2d2d;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 250px;
+  padding-top: 2.25rem;
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+`;
+
+const LeagueTitle = styled.p`
+  font-size: 1rem;
+  @media (min-width: 640px) {
+    font-size: 1.25rem;
+  }
+`;
+
+const CardScore = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2.5rem;
+  font-size: 3rem;
+`;
+
+const CardTeams = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 3rem 4rem;
+`;
+
+const TeamName = styled.p`
+  width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: calc(10px + 1vw);
+  @media (min-width: 640px) {
+    font-size: calc(12px + 0.5vw);
+  }
+`;
+
+const StatusText = styled.p<{ statusColor: string }>`
+  color: ${(props) => props.statusColor};
+`;
+
 interface MatchCardProps {
   country: string;
   leagueTitle: string;
@@ -39,52 +84,31 @@ const MatchCard: React.FC<MatchCardProps> = ({
   time,
 }) => {
   const statusEnum =
-    STATUS_MAPPING[status as keyof typeof STATUS_MAPPING] || status;
+    STATUS_MAPPING[status as keyof typeof STATUS_MAPPING] || STATUS.UPCOMING;
 
-  const dateObj = new Date(date || "");
-  const day = dateObj.getDate();
-  let formattedDaySuffix;
-
-  if ((day > 3 && day < 21) || day % 10 > 3) {
-    formattedDaySuffix = "th";
-  } else {
-    formattedDaySuffix = ["st", "nd", "rd"][(day % 10) - 1];
-  }
-
-  const formattedDay = day + formattedDaySuffix;
-  const formattedMonth = dateObj.toLocaleString("en-US", { month: "short" });
-  const formattedDate = `${formattedMonth.toUpperCase()} ${formattedDay}`;
+  const { formattedDate, statusColor } = getFormattedDateAndStatusColor(
+    statusEnum,
+    date
+  );
 
   return (
-    <div className="flex flex-col rounded-md border-gray-600 shadow-xl w-full pt-9">
-      <div className="flex flex-col justify-center items-center gap-1">
+    <CardContainer>
+      <CardHeader>
         <p>{country.toUpperCase()}</p>
-        <p className="text-xl">{leagueTitle}</p>
-        <p
-          className={`status-text ${
-            statusEnum === STATUS.ENDED
-              ? "text-green-500"
-              : statusEnum === STATUS.LIVE
-              ? "text-yellow-500"
-              : statusEnum === STATUS.CANCELLED
-              ? "text-red-500"
-              : "text-white"
-          }`}
-        >
+        <LeagueTitle>{leagueTitle}</LeagueTitle>
+        <StatusText statusColor={statusColor}>
           {statusEnum === "UPCOMING" ? `${formattedDate} ${time}` : statusEnum}
-        </p>
-      </div>
-      <div className="flex justify-center w-full mt-10">
-        <span>{homeScore}</span>- <span>{awayScore}</span>
-      </div>
-      <div className="flex items-center justify-between my-12 mx-16">
-        <p className=" w-28 truncate sm:text-sm lg:text-xl">{homeTeam}</p>
+        </StatusText>
+      </CardHeader>
+      <CardScore>
+        <span>{homeScore}</span>-<span>{awayScore}</span>
+      </CardScore>
+      <CardTeams>
+        <TeamName>{homeTeam}</TeamName>
         <Circle minute={minute} />
-        <p className=" w-28 truncate sm:text-sm md:text-xl lg:text-xl">
-          {awayTeam}
-        </p>
-      </div>
-    </div>
+        <TeamName>{awayTeam}</TeamName>
+      </CardTeams>
+    </CardContainer>
   );
 };
 

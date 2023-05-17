@@ -1,5 +1,6 @@
 "use client";
 
+import styled from "styled-components";
 import { Filter, Match } from "@/types";
 import { FunctionComponent, useMemo, useState } from "react";
 import FilterButton from "./FilterButton";
@@ -8,6 +9,23 @@ interface FiltersProps {
   matches: Match[];
   setFilter: React.Dispatch<React.SetStateAction<"all" | "finished" | "inprogress" | "notstarted">>;
 }
+
+const FiltersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const FiltersTitle = styled.div`
+  font-size: 2rem;
+  padding: 1rem;
+`;
+
+const FilterButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+`;
 
 const Filters: FunctionComponent<FiltersProps> = ({ matches, setFilter }) => {
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
@@ -34,9 +52,9 @@ const Filters: FunctionComponent<FiltersProps> = ({ matches, setFilter }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="text-2xl p-4">Filters</div>
-      <div className="flex flex-col pb-16">
+    <FiltersContainer>
+      <FiltersTitle>Filters</FiltersTitle>
+      <FilterButtonsContainer>
         <FilterButton
           filter="all"
           count={counts.all}
@@ -65,9 +83,10 @@ const Filters: FunctionComponent<FiltersProps> = ({ matches, setFilter }) => {
           label="Upcoming"
           isActive={activeFilter === "notstarted"}
         />
-      </div>
-    </div>
+      </FilterButtonsContainer>
+    </FiltersContainer>
   );
 };
 
 export default Filters;
+
