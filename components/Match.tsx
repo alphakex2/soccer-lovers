@@ -54,8 +54,9 @@ const TeamName = styled.p`
   }
 `;
 
-const StatusText = styled.p<{ statusColor: string }>`
-  color: ${(props) => props.statusColor};
+
+const StatusText = styled.p<{ $statusColor: string }>`
+  color: ${(props) => props.$statusColor};
 `;
 
 interface MatchCardProps {
